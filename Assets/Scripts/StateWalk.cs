@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class StateWalk : State
 {
-    public StateWalk(CubeStateV3 _machine) : base(_machine)
+    public StateWalk(StateMachineV3 _machine) : base(_machine)
     {
     }
 
@@ -12,19 +12,23 @@ public class StateWalk : State
     {
         machine.headSprite.color = Color.blue;
         machine.bodySprite.color = Color.blue;
+        machine.currentSpeed = machine.walkSpeed;
     }
     public override void OnUpdate()
     {
-        machine.rb2d.velocity = machine.direction * machine.moveSpeed;
-        if (machine.shiftPressed)
+        if (!machine.IsMoving)
         {
-            machine.ChangeState(CubeStateV3.STATE_RUN);
+            machine.ChangeState(StateMachineV3.STATE_IDLE);
+        }
+        else if (machine.shiftPressed)
+        {
+            machine.ChangeState(StateMachineV3.STATE_RUN);
+        }
+        else if (machine.jumpPressed)
+        {
+            machine.ChangeState(StateMachineV3.STATE_JUMP);
         }
 
-        if (machine.direction == Vector2.zero)
-        {
-            machine.ChangeState(CubeStateV3.STATE_IDLE);
-        }
     }
 
     public override void OnExit()

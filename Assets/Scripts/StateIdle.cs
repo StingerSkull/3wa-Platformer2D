@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class StateIdle : State
 {
-    public StateIdle(CubeStateV3 _machine) : base(_machine)
+    public StateIdle(StateMachineV3 _machine) : base(_machine)
     {
     }
 
@@ -12,19 +12,24 @@ public class StateIdle : State
     {
         machine.headSprite.color = Color.white;
         machine.bodySprite.color = Color.white;
+        machine.currentSpeed = 0f;
     }
     public override void OnUpdate()
     {
-        if (machine.direction != Vector2.zero)
+        if (machine.IsMoving)
         {
             if (machine.shiftPressed)
             {
-                machine.ChangeState(CubeStateV3.STATE_RUN);
+                machine.ChangeState(StateMachineV3.STATE_RUN);
             }
             else
             {
-                machine.ChangeState(CubeStateV3.STATE_WALK);
+                machine.ChangeState(StateMachineV3.STATE_WALK);
             }
+        }
+        else if (machine.jumpPressed)
+        {
+            machine.ChangeState(StateMachineV3.STATE_JUMP);
         }
     }
     public override void OnFixedUpdate()

@@ -4,9 +4,9 @@ using UnityEngine;
 
 public abstract class State
 {
-    protected CubeStateV3 machine;
+    protected StateMachineV3 machine;
 
-    public State(CubeStateV3 _machine)
+    public State(StateMachineV3 _machine)
     {
         machine = _machine;
     }
