@@ -10,8 +10,7 @@ public class StateIdle : State
 
     public override void OnEnter()
     {
-        machine.headSprite.color = Color.white;
-        machine.bodySprite.color = Color.white;
+        machine.playerAnimator.SetBool("AnimStateIdle", true);
         machine.currentSpeed = 0f;
     }
     public override void OnUpdate()
@@ -27,9 +26,13 @@ public class StateIdle : State
                 machine.ChangeState(StateMachineV3.STATE_WALK);
             }
         }
-        else if (machine.jumpPressed)
+        else if (machine.jumpPressed && machine.isGrounded)
         {
             machine.ChangeState(StateMachineV3.STATE_JUMP);
+        }
+        else if (!machine.isGrounded) 
+        {
+            machine.ChangeState(StateMachineV3.STATE_FALL);
         }
     }
     public override void OnFixedUpdate()
@@ -38,6 +41,7 @@ public class StateIdle : State
 
     public override void OnExit()
     {
+        machine.playerAnimator.SetBool("AnimStateIdle", false);
     }
 
 

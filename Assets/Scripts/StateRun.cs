@@ -10,9 +10,8 @@ public class StateRun : State
 
     public override void OnEnter()
     {
-        machine.headSprite.color = Color.red;
-        machine.bodySprite.color = Color.red;
         machine.currentSpeed = machine.runSpeed;
+        machine.playerAnimator.SetBool("AnimStateRun", true);
     }
     public override void OnUpdate()
     {
@@ -25,15 +24,20 @@ public class StateRun : State
         {
             machine.ChangeState(StateMachineV3.STATE_WALK);
         }
-        else if (machine.jumpPressed)
+        else if (machine.jumpPressed && machine.isGrounded)
         {
             machine.ChangeState(StateMachineV3.STATE_JUMP);
+        }
+        else if (!machine.isGrounded && machine.rb2d.velocity.y < 0)
+        {
+            machine.ChangeState(StateMachineV3.STATE_FALL);
         }
 
     }
 
     public override void OnExit()
     {
+        machine.playerAnimator.SetBool("AnimStateRun", false);
     }
 
     public override void OnFixedUpdate()

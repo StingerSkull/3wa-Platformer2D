@@ -11,19 +11,28 @@ public class StateFall : State
     public override void OnEnter()
     {
         machine.rb2d.gravityScale = machine.fallMultiplier;
+        machine.playerAnimator.SetBool("AnimStateFall", true);
     }
 
     public override void OnUpdate()
     {
-        if (machine.rb2d.velocity.y == 0f)
+        if (machine.isGrounded)
         {
-            machine.ChangeState(StateMachineV3.STATE_IDLE);
+            if (machine.IsMoving)
+            {
+                machine.ChangeState(StateMachineV3.STATE_WALK);
+            }
+            else
+            {
+                machine.ChangeState(StateMachineV3.STATE_IDLE);
+            }
         }
     }
 
     public override void OnExit()
     {
         machine.rb2d.gravityScale = 1f;
+        machine.playerAnimator.SetBool("AnimStateFall", false);
     }
 
     public override void OnFixedUpdate()

@@ -10,9 +10,8 @@ public class StateWalk : State
 
     public override void OnEnter()
     {
-        machine.headSprite.color = Color.blue;
-        machine.bodySprite.color = Color.blue;
         machine.currentSpeed = machine.walkSpeed;
+        machine.playerAnimator.SetBool("AnimStateWalk", true);
     }
     public override void OnUpdate()
     {
@@ -24,15 +23,20 @@ public class StateWalk : State
         {
             machine.ChangeState(StateMachineV3.STATE_RUN);
         }
-        else if (machine.jumpPressed)
+        else if (machine.jumpPressed && machine.isGrounded)
         {
             machine.ChangeState(StateMachineV3.STATE_JUMP);
+        }
+        else if (!machine.isGrounded && machine.rb2d.velocity.y < 0)
+        {
+            machine.ChangeState(StateMachineV3.STATE_FALL);
         }
 
     }
 
     public override void OnExit()
     {
+        machine.playerAnimator.SetBool("AnimStateWalk", false);
     }
 
     public override void OnFixedUpdate()
