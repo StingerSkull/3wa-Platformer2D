@@ -12,6 +12,7 @@ public class StateJump : State
 
     public override void OnEnter()
     {
+        machine.jumpPressed = false;
         if(machine.currentSpeed == 0)
         {
             machine.currentSpeed = machine.walkSpeed;

@@ -8,7 +8,6 @@ using UnityEngine.InputSystem;
 public class StateMachineV3 : MonoBehaviour
 {
     public Animator playerAnimator;
-    public SpriteRenderer bodySprite;
     public Rigidbody2D rb2d;
     public LayerMask groundMask;
     public Transform groundChecker;
@@ -29,6 +28,8 @@ public class StateMachineV3 : MonoBehaviour
     private float acceleration;
     private float deceleration;
     private float turnSpeed;
+    //private float setSpeed;
+    //private float chronoAirSpeed;
     public Vector2 velocity;
 
     private bool facingRight = true;
@@ -40,7 +41,11 @@ public class StateMachineV3 : MonoBehaviour
 
     public bool shiftPressed;
     public bool jumpPressed;
+    public bool slashPressed;
+    public bool stabPressed;
     public bool isGrounded;
+    public bool slashFinished;
+    public bool stabFinished;
 
     public Dictionary<string, State> _states = new();
     public State currentState;
@@ -126,13 +131,13 @@ public class StateMachineV3 : MonoBehaviour
         currentState?.OnExit();
         currentState = _states[stateName];
         currentState.OnEnter();
-/*
+
 #if UNITY_EDITOR
         Debug.Log("Exiting: " + currentState.ToString());
         Debug.Log("Entering: " + stateName);
 
 #endif
-*/
+
     }
 
     public void HorizontalMovement()
@@ -140,6 +145,9 @@ public class StateMachineV3 : MonoBehaviour
         acceleration = isGrounded ? maxAcceleration : maxAirAcceleration;
         deceleration = isGrounded ? maxDecceleration : maxAirDeceleration;
         turnSpeed = isGrounded ? maxTurnSpeed : maxAirTurnSpeed;
+        //chronoAirSpeed = isGrounded ? 0f : chronoAirSpeed += Time.deltaTime;
+        //setSpeed = currentSpeed/(1 + chronoAirSpeed);
+         
 
         if (IsMoving)
         {
@@ -246,4 +254,47 @@ public class StateMachineV3 : MonoBehaviour
                 break;
         }
     }
+
+    public void Slash(InputAction.CallbackContext context)
+    {
+        switch (context.phase)
+        {
+            case InputActionPhase.Disabled:
+                break;
+            case InputActionPhase.Waiting:
+                break;
+            case InputActionPhase.Started:
+                break;
+            case InputActionPhase.Performed:
+                slashPressed = true;
+                break;
+            case InputActionPhase.Canceled:
+                slashPressed = false;
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void Stab(InputAction.CallbackContext context)
+    {
+        switch (context.phase)
+        {
+            case InputActionPhase.Disabled:
+                break;
+            case InputActionPhase.Waiting:
+                break;
+            case InputActionPhase.Started:
+                break;
+            case InputActionPhase.Performed:
+                stabPressed = true;
+                break;
+            case InputActionPhase.Canceled:
+                stabPressed = false;
+                break;
+            default:
+                break;
+        }
+    }
+
 }

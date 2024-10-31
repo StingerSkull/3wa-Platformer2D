@@ -15,7 +15,11 @@ public class StateWalk : State
     }
     public override void OnUpdate()
     {
-        if (!machine.IsMoving)
+        if (machine.slashPressed || machine.stabPressed)
+        {
+            machine.ChangeState(StateMachineV3.STATE_ATTACK);
+        }
+        else if (!machine.IsMoving)
         {
             machine.ChangeState(StateMachineV3.STATE_IDLE);
         }
