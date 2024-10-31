@@ -16,7 +16,9 @@ public class GetAnimatorEvents : MonoBehaviour
             case 1:
                 machine.stabFinished = true;
                 break;
-
+            case 2:
+                machine.playerAnimator.SetBool("PlayerHurt", false);
+                break;
             default:
                 break;
         }

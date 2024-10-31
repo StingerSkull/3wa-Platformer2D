@@ -27,6 +27,9 @@ public class StateAttack : State
         }
         else if (machine.slashFinished || machine.stabFinished)
         {
+            machine.slashFinished = false;
+            machine.stabFinished = false;
+
             if (machine.IsMoving)
             {
                 machine.ChangeState(StateMachineV3.STATE_WALK);

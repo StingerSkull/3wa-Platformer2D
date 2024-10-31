@@ -13,6 +13,11 @@ public class StateMachineV3 : MonoBehaviour
     public Transform groundChecker;
     public Vector2 groundCheckerDimension;
 
+    public int playerLife;
+    private float chronoInvFrame;
+    public float invFramesTime = 0.3f;
+    public bool canBeHurt = true;
+
     [Header("Speeds")]
     public float currentSpeed = 0f;
     public float walkSpeed = 5f;
@@ -101,6 +106,14 @@ public class StateMachineV3 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!canBeHurt)
+        {
+            chronoInvFrame += Time.deltaTime;
+            if (chronoInvFrame > invFramesTime) 
+            {
+                canBeHurt = true;   
+            }
+        }
         currentState.OnUpdate();
 
     }
@@ -131,13 +144,13 @@ public class StateMachineV3 : MonoBehaviour
         currentState?.OnExit();
         currentState = _states[stateName];
         currentState.OnEnter();
-
+/*
 #if UNITY_EDITOR
         Debug.Log("Exiting: " + currentState.ToString());
         Debug.Log("Entering: " + stateName);
 
 #endif
-
+*/
     }
 
     public void HorizontalMovement()
@@ -170,7 +183,7 @@ public class StateMachineV3 : MonoBehaviour
 
         //Move our velocity towards the desired velocity, at the rate of the number calculated above
         Vector2 desiredVelocity = new Vector2(_moveDirection, 0f) * currentSpeed;
-        velocity.x = Mathf.MoveTowards(velocity.x, desiredVelocity.x, maxSpeedChange);
+        velocity.x = Mathf.MoveTowards(rb2d.velocity.x, desiredVelocity.x, maxSpeedChange);
         velocity.y = rb2d.velocity.y;
         //Update the Rigidbody with this new velocity
         rb2d.velocity = velocity;
@@ -297,4 +310,29 @@ public class StateMachineV3 : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.collider.CompareTag("Enemy"))
+        {
+            if(canBeHurt)
+            {
+                canBeHurt = false;
+                chronoInvFrame = 0f;
+                updatePlayerLife(-1);
+                playerAnimator.SetBool("PlayerHurt", true);
+            }
+
+            if (playerLife <= 0)
+            {
+                
+                //onDeath.Invoke();
+            }
+        }
+    }
+
+    public void updatePlayerLife(int value)
+    {
+        playerLife += value;
+        //healthBar.fillAmount = (float)playerLife / (float)maxPlayerLife;
+    }
 }

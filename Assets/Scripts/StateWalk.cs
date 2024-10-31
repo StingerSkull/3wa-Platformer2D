@@ -19,6 +19,10 @@ public class StateWalk : State
         {
             machine.ChangeState(StateMachineV3.STATE_ATTACK);
         }
+        else if (!machine.isGrounded && machine.rb2d.velocity.y < 0)
+        {
+            machine.ChangeState(StateMachineV3.STATE_FALL);
+        }
         else if (!machine.IsMoving)
         {
             machine.ChangeState(StateMachineV3.STATE_IDLE);
@@ -30,10 +34,6 @@ public class StateWalk : State
         else if (machine.jumpPressed && machine.isGrounded)
         {
             machine.ChangeState(StateMachineV3.STATE_JUMP);
-        }
-        else if (!machine.isGrounded && machine.rb2d.velocity.y < 0)
-        {
-            machine.ChangeState(StateMachineV3.STATE_FALL);
         }
 
     }

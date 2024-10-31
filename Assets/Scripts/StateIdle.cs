@@ -19,6 +19,10 @@ public class StateIdle : State
         {
             machine.ChangeState(StateMachineV3.STATE_ATTACK);
         }
+        else if (!machine.isGrounded && machine.rb2d.velocity.y < 0) 
+        {
+            machine.ChangeState(StateMachineV3.STATE_FALL);
+        }
         else if (machine.IsMoving)
         {
             if (machine.shiftPressed)
@@ -33,10 +37,6 @@ public class StateIdle : State
         else if (machine.jumpPressed && machine.isGrounded)
         {
             machine.ChangeState(StateMachineV3.STATE_JUMP);
-        }
-        else if (!machine.isGrounded) 
-        {
-            machine.ChangeState(StateMachineV3.STATE_FALL);
         }
     }
     public override void OnFixedUpdate()
