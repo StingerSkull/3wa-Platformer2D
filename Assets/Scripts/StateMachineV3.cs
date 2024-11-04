@@ -15,6 +15,7 @@ public class StateMachineV3 : MonoBehaviour
     public GameManager gameManager;
     public GameObject spawn;
     public HealthBar healthBar;
+    public AudioSource hurtSound;
 
     public int maxPlayerLife = 5;
     public int playerLife;
@@ -42,6 +43,7 @@ public class StateMachineV3 : MonoBehaviour
     public Vector2 velocity;
 
     private bool facingRight = true;
+    private bool canMove = true;
 
     [Header("Air Control")]
     public float jumpForce = 10f;
@@ -205,30 +207,33 @@ public class StateMachineV3 : MonoBehaviour
 
     public void Move(InputAction.CallbackContext context)
     {
-        switch (context.phase)
+        if (canMove)
         {
-            case InputActionPhase.Disabled:
-                break;
-            case InputActionPhase.Waiting:
-                break;
-            case InputActionPhase.Started:
-                break;
-            case InputActionPhase.Performed:
-                _moveDirection = context.ReadValue<Vector2>().x;
-                if (_moveDirection > 0 && !facingRight)
-                {
-                    Flip();
-                }
-                else if (_moveDirection < 0 && facingRight)
-                {
-                    Flip();
-                }
-                break;
-            case InputActionPhase.Canceled:
-                _moveDirection = 0f;
-                break;
-            default:
-                break;
+            switch (context.phase)
+            {
+                case InputActionPhase.Disabled:
+                    break;
+                case InputActionPhase.Waiting:
+                    break;
+                case InputActionPhase.Started:
+                    break;
+                case InputActionPhase.Performed:
+                    _moveDirection = context.ReadValue<Vector2>().x;
+                    if (_moveDirection > 0 && !facingRight)
+                    {
+                        Flip();
+                    }
+                    else if (_moveDirection < 0 && facingRight)
+                    {
+                        Flip();
+                    }
+                    break;
+                case InputActionPhase.Canceled:
+                    _moveDirection = 0f;
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -322,6 +327,7 @@ public class StateMachineV3 : MonoBehaviour
         {
             if(canBeHurt)
             {
+                hurtSound.Play();
                 canBeHurt = false;
                 chronoInvFrame = 0f;
                 updatePlayerLife(-1);
@@ -341,6 +347,8 @@ public class StateMachineV3 : MonoBehaviour
     {
         if (collision.CompareTag("End"))
         {
+            canMove = false;
+            _moveDirection = 0f;
             gameManager.Win();
         }
     }

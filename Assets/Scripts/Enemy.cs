@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class Enemy : MonoBehaviour
 {
@@ -11,18 +10,19 @@ public class Enemy : MonoBehaviour
     public float moveSpeed = 1f;
     public float range = 10f;
     public bool canFly = false;
-    
+    public AudioSource audioSound;
 
     private GameObject player;
     private GameObject gameManager;
     private bool facingRight = false;
 
-
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         Handles.color = Color.red;
-        Handles.DrawWireDisc(transform.position,Vector3.forward , range);
+        Handles.DrawWireDisc(transform.position, Vector3.forward, range);
     }
+#endif
 
     // Start is called before the first frame update
     void Start()
@@ -88,5 +88,6 @@ public class Enemy : MonoBehaviour
             }
         }
         gameManager.GetComponent<GameManager>().AddScore(600);
+        AudioSource.PlayClipAtPoint(audioSound.clip,transform.position);
     }
 }
