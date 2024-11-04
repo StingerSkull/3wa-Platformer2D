@@ -215,7 +215,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d816b62d31c8304995a0b193e36d317, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifePoints: 4
+  lifePoints: 2
   rb2d: {fileID: 3597850479942449509}
   moveSpeed: 1
   range: 10
+  canFly: 0

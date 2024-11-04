@@ -805,12 +805,12 @@ AnimatorState:
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
-  - {fileID: -5859262205152706199}
-  - {fileID: -1475408959058394691}
-  - {fileID: -8986348330815315683}
   - {fileID: 6267024356992498679}
   - {fileID: -6680951499343011429}
   - {fileID: 6140222974977091560}
+  - {fileID: -5859262205152706199}
+  - {fileID: -1475408959058394691}
+  - {fileID: -8986348330815315683}
   - {fileID: -2690193954947915888}
   m_StateMachineBehaviours: []
   m_Position: {x: 50, y: 50, z: 0}

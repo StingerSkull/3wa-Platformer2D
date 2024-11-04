@@ -8,6 +8,7 @@ TagManager:
   - SwordSlash
   - SwordStab
   - Enemy
+  - End
   layers:
   - Default
   - TransparentFX

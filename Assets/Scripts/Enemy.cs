@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -9,15 +10,25 @@ public class Enemy : MonoBehaviour
     public Rigidbody2D rb2d;
     public float moveSpeed = 1f;
     public float range = 10f;
+    public bool canFly = false;
     
 
     private GameObject player;
+    private GameObject gameManager;
     private bool facingRight = false;
+
+
+    private void OnDrawGizmos()
+    {
+        Handles.color = Color.red;
+        Handles.DrawWireDisc(transform.position,Vector3.forward , range);
+    }
 
     // Start is called before the first frame update
     void Start()
     {
         player = GameObject.Find("PlayerV2");
+        gameManager = GameObject.Find("GameManager");
     }
 
     // Update is called once per frame
@@ -27,7 +38,14 @@ public class Enemy : MonoBehaviour
         if (distance <= range)
         {
             Vector2 angleVector = (player.transform.position - transform.position);
-            rb2d.velocity = new Vector2(angleVector.normalized.x * moveSpeed, rb2d.velocity.y);
+            if (canFly)
+            {
+                rb2d.velocity = angleVector.normalized * moveSpeed;
+            }
+            else
+            {
+                rb2d.velocity = new Vector2(angleVector.normalized.x * moveSpeed, rb2d.velocity.y);
+            }
             if (rb2d.velocity.x > 0 && !facingRight)
             {
                 Flip();
@@ -36,6 +54,10 @@ public class Enemy : MonoBehaviour
             {
                 Flip();
             }
+        }
+        else
+        {
+            rb2d.velocity = Vector2.zero;
         }
     }
 
@@ -65,5 +87,6 @@ public class Enemy : MonoBehaviour
                 Destroy(gameObject);
             }
         }
+        gameManager.GetComponent<GameManager>().AddScore(600);
     }
 }

@@ -12,7 +12,11 @@ public class StateMachineV3 : MonoBehaviour
     public LayerMask groundMask;
     public Transform groundChecker;
     public Vector2 groundCheckerDimension;
+    public GameManager gameManager;
+    public GameObject spawn;
+    public HealthBar healthBar;
 
+    public int maxPlayerLife = 5;
     public int playerLife;
     private float chronoInvFrame;
     public float invFramesTime = 0.3f;
@@ -100,7 +104,9 @@ public class StateMachineV3 : MonoBehaviour
         _states.Add(STATE_FALL, new StateFall(this));
         _states.Add(STATE_ATTACK, new StateAttack(this));
         ChangeState(STATE_IDLE);
-        
+
+        playerLife = maxPlayerLife;
+
     }
 
     // Update is called once per frame
@@ -324,15 +330,25 @@ public class StateMachineV3 : MonoBehaviour
 
             if (playerLife <= 0)
             {
-                
-                //onDeath.Invoke();
+                transform.position = spawn.transform.position;
+                playerLife = maxPlayerLife;
+                healthBar.ResetHearts();
             }
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("End"))
+        {
+            gameManager.Win();
         }
     }
 
     public void updatePlayerLife(int value)
     {
         playerLife += value;
-        //healthBar.fillAmount = (float)playerLife / (float)maxPlayerLife;
+        healthBar.RemoveHeart();
     }
+
 }
